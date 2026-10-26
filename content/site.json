@@ -1,0 +1,50 @@
+{
+  "settings": {
+    "pageTitle": "Ajayi Samuel — Cinematographer, Videographer & Photographer",
+    "description": "The showreel of Ajayi Samuel (SA Imagery): brand films, edits, events and photography for Web3bridge, Amplify Africa, AllThings Africa and more.",
+    "tagline": "Telling African stories, one frame at a time."
+  },
+  "contact": {
+    "email": "",
+    "bookingUrl": "",
+    "socials": [
+      { "label": "Instagram", "url": "" },
+      { "label": "YouTube", "url": "" },
+      { "label": "LinkedIn", "url": "" },
+      { "label": "X", "url": "" }
+    ]
+  },
+  "reel": {
+    "title": "The reel",
+    "note": "Hover to play with sound\nClick to open the project"
+  },
+  "photography": {
+    "title": "Photography",
+    "note": "Edited stills, grouped by set"
+  },
+  "videos": {
+    "title": "More videos",
+    "note": "Interviews, events, social and more"
+  },
+  "about": {
+    "name": "Ajayi\nSamuel",
+    "lead": "I'm Ajayi Samuel — cinematographer, videographer and photographer behind SA Imagery. Serious about the craft, playful behind the scenes, and happiest with a Sony in hand.",
+    "body": "Placeholder — a few lines on how Samuel works, what he looks for in a story and the kind of projects he wants next. He'll edit this himself.",
+    "photo": "",
+    "photoAlt": "",
+    "facts": [
+      { "label": "Roles", "value": "Cinematographer · Videographer · Photographer · Editor" },
+      { "label": "Shoots on", "value": "Sony" },
+      { "label": "Off duty", "value": "On the pitch — or watching Arsenal" }
+    ],
+    "logos": [
+      { "name": "Web3bridge", "logo": "/media/logos/web3bridge.png" },
+      { "name": "Amplify Africa", "logo": "/media/logos/amplify-africa.png" },
+      { "name": "AllThings Africa", "logo": "/media/logos/allthings-africa.png" }
+    ]
+  },
+  "footer": {
+    "headline": "Got a story?",
+    "wrap": "That's a wrap"
+  }
+}

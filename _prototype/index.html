@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Samuel Ajayi — Showreel (intro prototype)</title>
+  <meta name="description" content="Intro prototype: lights, camera, action, curtain reveal.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-curtain="velvet">
+
+  <!-- ============ REEL (revealed behind the curtain) ============ -->
+  <div class="view view--reel" id="reel">
+    <header class="top">
+      <a class="logo" href="#" aria-label="SA Imagery"><span class="logo__mark">SA</span><span class="mono muted">Samuel Ajayi</span></a>
+      <span class="mono muted top__label">Selected work — 2026</span>
+    </header>
+
+    <main class="reel">
+      <h1 class="reel__title"><span class="mono muted">( 01 )</span> The reel</h1>
+      <ul class="clips" role="list" data-clips>
+        <!-- placeholder clips: real previews come from Cloudinary later -->
+      </ul>
+      <p class="mono muted reel__note">Prototype — clips are placeholders. Hover (or tap) a clip, then click to see the page transition.</p>
+    </main>
+  </div>
+
+  <!-- ============ PROJECT PAGE (stub, to show the transition) ============ -->
+  <div class="view view--project" id="project" hidden>
+    <header class="top">
+      <button class="mono back" type="button" data-back>← Back to the reel</button>
+      <span class="mono muted top__label" data-project-code>SA_001</span>
+    </header>
+    <main class="project">
+      <p class="mono muted" data-project-client>Client — Brand film</p>
+      <h1 class="project__title" data-project-title>Project title</h1>
+      <div class="project__video">
+        <span class="play play--lg" aria-hidden="true"><svg width="22" height="24" viewBox="0 0 22 24"><path d="M22 12L0 24V0L22 12Z" fill="currentColor"/></svg></span>
+        <span class="mono muted">Full video plays here</span>
+      </div>
+      <div class="project__notes">
+        <section><h2 class="mono">The brief</h2><p>Placeholder — what the client needed, who it was for and the one feeling the film had to leave behind.</p></section>
+        <section><h2 class="mono">The approach</h2><p>Placeholder — how Samuel planned the shoot: locations, light, lenses and the shots that carried the story.</p></section>
+        <section><h2 class="mono">The edit</h2><p>Placeholder — pacing, music, colour and the choices made in the cut.</p></section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ CURTAIN (velvet) ============ -->
+  <div class="curtain" id="curtain" aria-hidden="true">
+    <div class="drape drape--l"></div>
+    <div class="drape drape--r"></div>
+  </div>
+
+  <!-- ============ INTRO: lights, camera, action ============ -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="spot"></div>
+    <p class="word" data-word="lights">Lights</p>
+
+    <div class="frame">
+      <i></i><i></i><i></i><i></i>
+      <span class="frame__rec mono"><span class="rec-dot"></span>REC <span data-timecode>00:00:00:00</span></span>
+      <span class="frame__fmt mono">4K · 24P</span>
+    </div>
+    <p class="word" data-word="camera">Camera</p>
+
+    <svg class="clapper" viewBox="0 0 320 240" aria-hidden="true">
+      <g class="clapper__stick">
+        <rect x="10" y="40" width="300" height="34" fill="#0b0b0a" stroke="#f3efe7" stroke-width="3"/>
+        <path d="M30 40 L60 74 M90 40 L120 74 M150 40 L180 74 M210 40 L240 74 M270 40 L300 74" stroke="#f3efe7" stroke-width="14"/>
+      </g>
+      <rect x="10" y="78" width="300" height="34" fill="#0b0b0a" stroke="#f3efe7" stroke-width="3"/>
+      <path d="M40 78 L10 112 M100 78 L70 112 M160 78 L130 112 M220 78 L190 112 M280 78 L250 112" stroke="#f3efe7" stroke-width="14"/>
+      <rect x="10" y="112" width="300" height="118" fill="#0b0b0a" stroke="#f3efe7" stroke-width="3"/>
+      <text x="26" y="146" class="clapper__text">SA IMAGERY</text>
+      <text x="26" y="178" class="clapper__text clapper__text--muted">SCENE 01</text>
+      <text x="170" y="178" class="clapper__text clapper__text--muted">TAKE 01</text>
+      <text x="26" y="212" class="clapper__text clapper__text--muted">DIR. SAMUEL AJAYI</text>
+    </svg>
+    <p class="word word--action" data-word="action">Action</p>
+    <div class="flash"></div>
+  </div>
+
+  <!-- ============ UI ============ -->
+  <button class="sound mono" type="button" aria-pressed="true" data-sound>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="sound__waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="sound__mute" d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <span data-sound-label>Sound on</span>
+  </button>
+  <button class="skip mono" type="button" data-skip>Skip intro →</button>
+
+  <!-- Prototype-only: replay the intro -->
+  <div class="proto">
+    <button class="mono" type="button" data-replay>↻ Replay intro</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="intro.js" defer></script>
+</body>
+</html>

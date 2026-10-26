@@ -1,0 +1,50 @@
+{
+  "title": "Project title",
+  "client": "Web3bridge",
+  "type": "Interview series",
+  "role": "DP · Editor",
+  "year": "20XX",
+  "length": "00:00",
+  "section": "more",
+  "order": 8,
+  "video": "",
+  "previewStart": 0,
+  "poster": "",
+  "notes": [
+    {
+      "heading": "The brief",
+      "text": "Placeholder — what the client needed, who it was for and the one feeling the film had to leave behind."
+    },
+    {
+      "heading": "The approach",
+      "text": "Placeholder — how the shoot was planned: locations, light, lenses, and the handful of shots that carry the story."
+    },
+    {
+      "heading": "On set",
+      "text": "Placeholder — what happened on the day, what changed, and the moment that made the film."
+    },
+    {
+      "heading": "The edit",
+      "text": "Placeholder — pacing, music, colour and sound; the choices made in the cut and why."
+    }
+  ],
+  "stills": [],
+  "credits": [
+    {
+      "label": "Client",
+      "value": "Web3bridge"
+    },
+    {
+      "label": "Direction & camera",
+      "value": "Ajayi Samuel"
+    },
+    {
+      "label": "Edit & colour",
+      "value": "Ajayi Samuel"
+    },
+    {
+      "label": "Shot on",
+      "value": "Sony"
+    }
+  ]
+}

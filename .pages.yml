@@ -1,0 +1,156 @@
+# Pages CMS config (https://pagescms.org) — the editor Samuel uses for the showreel site.
+# Every save commits to GitHub and Vercel rebuilds the site in about a minute.
+# Videos live on Cloudinary: upload there, then paste the video's link into a project.
+media:
+  input: media
+  output: /media
+
+content:
+  - name: projects
+    label: Video projects
+    type: collection
+    path: content/projects
+    format: json
+    filename: "{primary}.json"
+    view:
+      fields: [title, client, section, order]
+      primary: title
+      sort: [order]
+    fields:
+      - { name: title, label: Project title, type: string, required: true }
+      - { name: client, label: Client, type: string }
+      - { name: type, label: Type, type: string, description: "e.g. Brand film, Event film, Music video" }
+      - { name: role, label: Your role, type: string, description: "e.g. Director · DP · Editor" }
+      - { name: year, label: Year, type: string }
+      - { name: length, label: Length, type: string, description: "e.g. 03:24" }
+      - name: section
+        label: Where it shows
+        type: select
+        options:
+          values:
+            - { value: reel, label: "The reel (grid of clips at the top)" }
+            - { value: more, label: "More videos (list further down)" }
+      - { name: order, label: Order, type: number, description: Lower numbers show first. The first reel project is the big featured clip. }
+      - { name: video, label: Video link, type: string, description: "Cloudinary video URL (best — previews are cut automatically), or a YouTube / Vimeo link." }
+      - { name: previewStart, label: Preview starts at (seconds), type: number, description: "Where the 6-second reel preview begins. Cloudinary videos only." }
+      - { name: poster, label: Thumbnail (optional), type: image, description: Leave empty to use a frame from the Cloudinary video. }
+      - name: notes
+        label: Thought process
+        type: object
+        list: true
+        fields:
+          - { name: heading, label: Heading, type: string }
+          - { name: text, label: Text, type: text }
+      - name: stills
+        label: Stills (shown inside the thought process)
+        type: object
+        list: true
+        fields:
+          - { name: image, label: Still, type: image }
+          - { name: caption, label: Caption, type: string }
+      - name: credits
+        label: Credits
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Role, type: string }
+          - { name: value, label: Name, type: string }
+
+  - name: sets
+    label: Photo sets
+    type: collection
+    path: content/sets
+    format: json
+    filename: "{primary}.json"
+    view:
+      fields: [title, client, order]
+      primary: title
+      sort: [order]
+    fields:
+      - { name: title, label: Set title, type: string, required: true }
+      - { name: client, label: Client, type: string }
+      - { name: year, label: Year, type: string }
+      - { name: order, label: Order, type: number }
+      - { name: cover, label: Cover photo, type: image, description: Leave empty to use the first photo. }
+      - name: images
+        label: Photos
+        type: object
+        list: true
+        fields:
+          - { name: image, label: Photo, type: image }
+          - { name: caption, label: Caption (optional), type: string }
+
+  - name: site
+    label: Site text, about & contact
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: settings
+        label: General
+        type: object
+        fields:
+          - { name: pageTitle, label: Browser tab title, type: string }
+          - { name: description, label: Search engine description, type: text }
+          - { name: tagline, label: Tagline, type: string }
+      - name: contact
+        label: Contact & booking
+        type: object
+        fields:
+          - { name: email, label: Email address, type: string }
+          - { name: bookingUrl, label: Booking link, type: string, description: "Empty = opens an email, or scrolls to Contact." }
+          - name: socials
+            label: Social links
+            type: object
+            list: true
+            fields:
+              - { name: label, label: Name, type: string }
+              - { name: url, label: Link, type: string }
+      - name: reel
+        label: Reel section
+        type: object
+        fields:
+          - { name: title, label: Heading, type: string }
+          - { name: note, label: Small note, type: text }
+      - name: photography
+        label: Photography section
+        type: object
+        fields:
+          - { name: title, label: Heading, type: string }
+          - { name: note, label: Small note, type: text }
+      - name: videos
+        label: More videos section
+        type: object
+        fields:
+          - { name: title, label: Heading, type: string }
+          - { name: note, label: Small note, type: text }
+      - name: about
+        label: About
+        type: object
+        fields:
+          - { name: name, label: Name (new line = line break), type: text }
+          - { name: lead, label: First paragraph, type: text }
+          - { name: body, label: Second paragraph, type: text }
+          - { name: photo, label: Portrait, type: image }
+          - { name: photoAlt, label: Describe the portrait, type: string }
+          - name: facts
+            label: Quick facts
+            type: object
+            list: true
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: value, label: Value, type: string }
+          - name: logos
+            label: Worked with (logos)
+            description: White logos on a transparent background look best.
+            type: object
+            list: true
+            fields:
+              - { name: name, label: Brand name, type: string }
+              - { name: logo, label: Logo, type: image }
+      - name: footer
+        label: Footer
+        type: object
+        fields:
+          - { name: headline, label: Big headline, type: string }
+          - { name: wrap, label: Curtain text, type: string }
