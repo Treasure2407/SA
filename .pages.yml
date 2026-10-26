@@ -106,12 +106,6 @@ content:
             fields:
               - { name: label, label: Name, type: string }
               - { name: url, label: Link, type: string }
-      - name: reel
-        label: Reel section
-        type: object
-        fields:
-          - { name: title, label: Heading, type: string }
-          - { name: note, label: Small note, type: text }
       - name: photography
         label: Photography section
         type: object

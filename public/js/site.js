@@ -7,8 +7,8 @@ const pad = (n) => String(n).padStart(2, '0');
 const store = { get: (k) => { try { return sessionStorage.getItem(k); } catch { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch {} }, del: (k) => { try { sessionStorage.removeItem(k); } catch {} } };
 
 /* ================= Sound =================
-   On by default. Browsers hold audio until the first tap/click/key; we unlock then.
-   The toggle mutes everything: synth effects and clip audio. */
+   Always on. Browsers hold audio until the first tap/click/key; we unlock then.
+   (A [data-sound] mute toggle is supported if one is ever added back to the page.) */
 const sound = (() => {
   let on = store.get('sa-muted') !== '1';
   const btn = $('[data-sound]');
@@ -24,9 +24,11 @@ const sound = (() => {
   const live = () => !!ctx && ctx.state === 'running';
   const listeners = new Set();
   function update() {
-    btn.setAttribute('aria-pressed', String(on));
-    btn.classList.toggle('is-waiting', on && !live());
-    label.textContent = !on ? 'Sound off' : live() ? 'Sound on' : 'Tap for sound';
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(on));
+      btn.classList.toggle('is-waiting', on && !live());
+      label.textContent = !on ? 'Sound off' : live() ? 'Sound on' : 'Tap for sound';
+    }
     listeners.forEach((fn) => fn());
   }
   function unlock() { if (ctx && !live()) ctx.resume().then(update, update); }
@@ -56,7 +58,7 @@ const sound = (() => {
     tick: () => burst({ dur: 0.015, type: 'highpass', freq: 4000, gain: 0.08 }),
   };
 
-  btn.addEventListener('click', () => {
+  btn?.addEventListener('click', () => {
     if (on && !live()) return; // the first click only unlocks audio
     on = !on; store.set('sa-muted', on ? '0' : '1'); update();
   });
@@ -129,8 +131,8 @@ function playIntro() {
   gsap.set(stick, { rotation: -26, transformOrigin: '0% 100%' });
   window.scrollTo(0, 0);
 
+  store.del('sa-curtain');
   const done = () => {
-    store.set('sa-intro', '1');
     html.classList.remove('intro-on');
     curtain.open();
   };
@@ -204,12 +206,12 @@ clips.forEach((link) => {
 if (!finePointer) $$('.reel .head__note').forEach((n) => { n.innerHTML = n.innerHTML.replace(/hover/i, 'Tap').replace(/click/i, 'Tap again'); });
 $('[data-more]')?.addEventListener('click', (e) => { $('[data-clips]').classList.add('is-all'); e.currentTarget.remove(); });
 
-/* ================= Photo sets strip ================= */
+/* ================= Photo sets strip =================
+   Drifts on its own (CSS). Hover pauses it on desktop; on touch screens a press holds it. */
 const sets = $('[data-sets]');
 if (sets) {
-  const step = () => (sets.querySelector('.set')?.offsetWidth || 300) + 24;
-  $('[data-sets-prev]').addEventListener('click', () => sets.scrollBy({ left: -step(), behavior: 'smooth' }));
-  $('[data-sets-next]').addEventListener('click', () => sets.scrollBy({ left: step(), behavior: 'smooth' }));
+  sets.addEventListener('touchstart', () => sets.classList.add('is-held'), { passive: true });
+  ['touchend', 'touchcancel'].forEach((t) => sets.addEventListener(t, () => sets.classList.remove('is-held')));
 }
 
 /* ================= More videos: preview follows the cursor ================= */

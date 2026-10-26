@@ -8,15 +8,23 @@
     "email": "",
     "bookingUrl": "",
     "socials": [
-      { "label": "Instagram", "url": "" },
-      { "label": "YouTube", "url": "" },
-      { "label": "LinkedIn", "url": "" },
-      { "label": "X", "url": "" }
+      {
+        "label": "Instagram",
+        "url": ""
+      },
+      {
+        "label": "YouTube",
+        "url": ""
+      },
+      {
+        "label": "LinkedIn",
+        "url": ""
+      },
+      {
+        "label": "X",
+        "url": ""
+      }
     ]
-  },
-  "reel": {
-    "title": "The reel",
-    "note": "Hover to play with sound\nClick to open the project"
   },
   "photography": {
     "title": "Photography",
@@ -33,14 +41,32 @@
     "photo": "",
     "photoAlt": "",
     "facts": [
-      { "label": "Roles", "value": "Cinematographer · Videographer · Photographer · Editor" },
-      { "label": "Shoots on", "value": "Sony" },
-      { "label": "Off duty", "value": "On the pitch — or watching Arsenal" }
+      {
+        "label": "Roles",
+        "value": "Cinematographer · Videographer · Photographer · Editor"
+      },
+      {
+        "label": "Shoots on",
+        "value": "Sony"
+      },
+      {
+        "label": "Off duty",
+        "value": "On the pitch — or watching Arsenal"
+      }
     ],
     "logos": [
-      { "name": "Web3bridge", "logo": "/media/logos/web3bridge.png" },
-      { "name": "Amplify Africa", "logo": "/media/logos/amplify-africa.png" },
-      { "name": "AllThings Africa", "logo": "/media/logos/allthings-africa.png" }
+      {
+        "name": "Web3bridge",
+        "logo": "/media/logos/web3bridge.png"
+      },
+      {
+        "name": "Amplify Africa",
+        "logo": "/media/logos/amplify-africa.png"
+      },
+      {
+        "name": "AllThings Africa",
+        "logo": "/media/logos/allthings-africa.png"
+      }
     ]
   },
   "footer": {

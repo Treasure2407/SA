@@ -36,8 +36,6 @@ const PLAY = '<svg width="22" height="24" viewBox="0 0 22 24" aria-hidden="true"
 const SPEAKER = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="sound__waves" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="sound__mute" d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 const vf = (cls = 'vf') => `<div class="${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></div>`;
 
-const soundBtn = `<button class="sound mono" type="button" aria-pressed="true" data-sound>${SPEAKER}<span data-sound-label>Sound on</span></button>`;
-
 function cta(c) {
   const href = c.contact.bookingUrl || (c.contact.email ? `mailto:${c.contact.email}` : '#contact');
   return `href="${esc(href)}"${c.contact.bookingUrl ? ' target="_blank" rel="noopener"' : ''}`;
@@ -54,11 +52,15 @@ function layout(c, { title, description, page, body }) {
   <meta name="theme-color" content="#000000">
   <script>
     // Decide before first paint whether the intro or a closed curtain covers the page (avoids a flash).
+    // The home page plays the full intro on every fresh load or refresh; arriving through the
+    // curtain from another page (or with the back button) only opens the curtain.
     (function () {
       var d = document.documentElement, s = sessionStorage, rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
       try {
-        if (d.dataset.page === 'home' && !s.getItem('sa-intro') && !rm) d.classList.add('intro-on', 'curtain-on');
-        else if (s.getItem('sa-curtain') === 'closed' && !rm) d.classList.add('curtain-on');
+        var nav = performance.getEntriesByType('navigation')[0], viaCurtain = s.getItem('sa-curtain') === 'closed';
+        if (rm) return;
+        if (d.dataset.page === 'home' && (!viaCurtain || (nav && nav.type === 'reload')) && !(nav && nav.type === 'back_forward')) d.classList.add('intro-on', 'curtain-on');
+        else if (viaCurtain) d.classList.add('curtain-on');
       } catch (e) {}
     })();
   </script>
@@ -71,7 +73,6 @@ function layout(c, { title, description, page, body }) {
   <a class="skip-link" href="#main">Skip to content</a>
 ${body}
   <div class="curtain" aria-hidden="true"><div class="drape drape--l"></div><div class="drape drape--r"></div></div>
-  ${soundBtn}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="/js/site.js" defer></script>
 </body>
@@ -173,31 +174,34 @@ ${nav(c, 'Reel')}
   <button class="skip mono" type="button" data-skip>Skip intro →</button>
 
   <main id="main">
-    <!-- 01 REEL -->
-    <section class="section reel" id="reel" aria-labelledby="reel-title">
-${head('01', 'reel', c.reel.title, c.reel.note)}
-      <ul class="clips" role="list" data-clips>
+    <!-- HERO: the featured clip fills the screen, nav on top -->
+    <section class="hero" aria-label="Featured project">
+      <ul class="hero__clip" role="list">
 ${feature ? clip(feature, 0, true) : ''}
-${rest.map((p, i) => clip(p, i + 1)).join('')}
       </ul>
-      ${rest.length > 3 ? `<button class="btn btn--outline clips__more" type="button" data-more>Show all ${reel.length} clips ↓</button>` : ''}
     </section>
 
-    <!-- 02 PHOTOGRAPHY -->
+    <!-- 01 REEL -->
+    <section class="section reel" id="reel" aria-label="The reel">
+      <ul class="clips" role="list" data-clips>
+${rest.map((p, i) => clip(p, i + 1)).join('')}
+      </ul>
+      ${rest.length > 4 ? `<button class="btn btn--outline clips__more" type="button" data-more>Show all ${rest.length} clips ↓</button>` : ''}
+    </section>
+
+    <!-- 02 PHOTOGRAPHY: sets drift sideways on their own; hovering one pauses the strip -->
     <section class="section photo" id="photography" aria-labelledby="photography-title">
 ${head('02', 'photography', c.photography.title, c.photography.note)}
-      <ul class="sets" role="list" data-sets>
-${sets.map((s, i) => `        <li class="set">
-          <a class="set__link" href="/photos/${s.slug}/" data-curtain-link>
-            <div class="set__stack">${img(s.cover || s.images?.find((x) => x.image)?.image, s.title, `Set ${pad(i + 1)} cover`)}</div>
-            <p class="set__name">${esc(s.title)}</p>
-            <p class="mono muted">${pad((s.images || []).length)} images</p>
-          </a>
-        </li>`).join('\n')}
-      </ul>
-      <div class="sets__foot">
-        <p class="sets__count">${pad(sets.length)}</p>
-        <div class="sets__nav"><button class="round" type="button" data-sets-prev aria-label="Previous sets">←</button><button class="round" type="button" data-sets-next aria-label="Next sets">→</button></div>
+      <div class="sets" data-sets>
+        <ul class="sets__track" role="list" style="--n:${Math.max(sets.length, 1)}">
+${[0, 1].map((copy) => sets.map((s, i) => `          <li class="set"${copy ? ' aria-hidden="true"' : ''}>
+            <a class="set__link" href="/photos/${s.slug}/" data-curtain-link${copy ? ' tabindex="-1"' : ''}>
+              <div class="set__stack">${img(s.cover || s.images?.find((x) => x.image)?.image, copy ? '' : s.title, `Set ${pad(i + 1)} cover`)}</div>
+              <p class="set__name">${esc(s.title)}</p>
+              <p class="mono muted">${pad((s.images || []).length)} images</p>
+            </a>
+          </li>`).join('\n')).join('\n')}
+        </ul>
       </div>
     </section>
 
