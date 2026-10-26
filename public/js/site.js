@@ -260,6 +260,37 @@ if (player) {
   $('[data-fs]', player).addEventListener('click', () => (document.fullscreenElement ? document.exitFullscreen() : player.requestFullscreen?.()));
 }
 
+/* ================= Cursor =================
+   A blue dot with a viewfinder frame that trails it. Over links the frame turns blue;
+   over clips and photo sets it opens up and reads "Play" or "View". Mouse/trackpad only. */
+const cursorEl = $('.cursor');
+if (cursorEl && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  html.classList.add('has-cursor');
+  const dot = $('.cursor__dot', cursorEl), frame = $('.cursor__frame', cursorEl), label = $('.cursor__label', cursorEl);
+  let mx = -100, my = -100, fx = mx, fy = my;
+  const ease = reduceMotion ? 1 : 0.2;
+  window.addEventListener('pointermove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+    cursorEl.classList.remove('is-hidden');
+  }, { passive: true });
+  (function follow() {
+    fx += (mx - fx) * ease; fy += (my - fy) * ease;
+    frame.style.transform = `translate3d(${fx}px, ${fy}px, 0)`;
+    requestAnimationFrame(follow);
+  })();
+  document.addEventListener('pointerover', (e) => {
+    const media = e.target.closest('[data-clip], .row');
+    const set = e.target.closest('.set__link');
+    cursorEl.classList.toggle('is-media', !!(media || set));
+    cursorEl.classList.toggle('is-link', !media && !set && !!e.target.closest('a, button'));
+    label.textContent = set ? 'View' : media ? 'Play' : '';
+  });
+  document.addEventListener('pointerdown', () => cursorEl.classList.add('is-down'));
+  document.addEventListener('pointerup', () => cursorEl.classList.remove('is-down'));
+  document.documentElement.addEventListener('pointerleave', () => cursorEl.classList.add('is-hidden'));
+}
+
 /* ================= Misc ================= */
 $$('[data-placeholder-link]').forEach((a) => a.addEventListener('click', (e) => e.preventDefault()));
 $$('[data-top]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }); }));

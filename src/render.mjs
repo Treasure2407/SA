@@ -50,6 +50,7 @@ function layout(c, { title, description, page, body }) {
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
   <meta name="theme-color" content="#000000">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script>
     // Decide before first paint whether the intro or a closed curtain covers the page (avoids a flash).
     // The home page plays the full intro on every fresh load or refresh; arriving through the
@@ -73,6 +74,7 @@ function layout(c, { title, description, page, body }) {
   <a class="skip-link" href="#main">Skip to content</a>
 ${body}
   <div class="curtain" aria-hidden="true"><div class="drape drape--l"></div><div class="drape drape--r"></div></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__frame"><span class="cursor__label mono"></span></span><span class="cursor__dot"></span></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="/js/site.js" defer></script>
 </body>
@@ -172,6 +174,8 @@ ${nav(c, 'Reel')}
     <div class="flash"></div>
   </div>
   <button class="skip mono" type="button" data-skip>Skip intro →</button>
+  <!-- sound control lives on the intro only; tapping it is what lets browsers play the intro sounds -->
+  <button class="sound mono" type="button" aria-pressed="true" data-sound>${SPEAKER}<span data-sound-label>Sound on</span></button>
 
   <main id="main">
     <!-- HERO: the featured clip fills the screen, nav on top -->
