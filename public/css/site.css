@@ -356,6 +356,16 @@ html.intro-on .intro { display: block; }
 .clapper__text { font-family: var(--f-mono); font-size: 15px; letter-spacing: .1em; fill: var(--paper); }
 .clapper__text--muted { fill: var(--muted); font-size: 13px; }
 .flash { position: absolute; inset: 0; background: var(--paper); opacity: 0; pointer-events: none; }
+/* "Tap anywhere to roll" — waits up to 4s for the tap that unlocks sound */
+.gate { position: absolute; inset: 0; z-index: 2; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; cursor: pointer; transition: opacity .35s; }
+html.gate-on .gate { display: flex; }
+.gate.is-gone { opacity: 0; pointer-events: none; }
+.gate__line { display: flex; align-items: center; gap: 10px; font-size: 14px; letter-spacing: .14em; color: var(--paper); }
+.gate__bar { position: relative; width: 140px; height: 1px; background: var(--line); overflow: hidden; }
+.gate__bar i { position: absolute; inset: 0; background: var(--accent); transform-origin: left; scale: 0 1; }
+html.gate-on .gate__bar i { animation: gate-fill 4s linear forwards; }
+@keyframes gate-fill { to { scale: 1 1; } }
+.gate__hint { font-size: 11px; }
 .skip { position: fixed; z-index: 40; top: 18px; left: var(--gutter); display: none; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgb(0 0 0 / .6); color: var(--muted); }
 .skip:hover { color: var(--paper); }
 html.intro-on .skip { display: block; }

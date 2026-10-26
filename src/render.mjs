@@ -156,6 +156,12 @@ export function homePage(c, projects, sets) {
 ${nav(c, 'Reel')}
   <!-- ============ INTRO: lights, camera, action (first visit per session) ============ -->
   <div class="intro" aria-hidden="true" data-intro>
+    <!-- "Tap to roll": the tap is what lets the browser play the intro with sound -->
+    <div class="gate" data-gate>
+      <p class="gate__line mono"><span class="rec-dot"></span>Tap anywhere to roll</p>
+      <span class="gate__bar"><i></i></span>
+      <p class="mono muted gate__hint">Best with sound on</p>
+    </div>
     <div class="spot"></div>
     <p class="word" data-word="lights">Lights</p>
     <div class="frame"><i></i><i></i><i></i><i></i><span class="frame__rec mono"><span class="rec-dot"></span>REC <span data-timecode>00:00:00:00</span></span><span class="frame__fmt mono">4K · 24P</span></div>

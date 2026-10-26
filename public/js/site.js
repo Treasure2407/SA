@@ -65,6 +65,9 @@ const sound = (() => {
   update();
   return {
     play: (name, ...a) => { if (on && live()) fx[name](...a); },
+    live,
+    // resolves once the browser lets us play sound (call it from inside a tap/click/key handler)
+    unlock: () => (ctx && !live() ? ctx.resume().then(update, update) : Promise.resolve()),
     // clip audio may play once sound is on and the visitor has interacted with the page
     canHear: () => on && (navigator.userActivation ? navigator.userActivation.hasBeenActive : live()),
     isOn: () => on,
@@ -133,10 +136,10 @@ function playIntro() {
 
   store.del('sa-curtain');
   const done = () => {
-    html.classList.remove('intro-on');
+    html.classList.remove('intro-on', 'gate-on');
     curtain.open();
   };
-  const tl = gsap.timeline({ delay: 0.4, onComplete: done })
+  const tl = gsap.timeline({ paused: true, delay: 0.4, onComplete: done })
     .to(spot, { keyframes: [{ opacity: 0.7, duration: 0.05 }, { opacity: 0.05, duration: 0.09 }, { opacity: 0.9, duration: 0.05 }, { opacity: 0.25, duration: 0.12 }, { opacity: 1, duration: 0.2 }] })
     .call(() => sound.play('flicker'), null, 0).call(() => sound.play('flicker'), null, 0.14).call(() => sound.play('flicker'), null, 0.31)
     .fromTo(words.lights, { opacity: 0, letterSpacing: '0.4em' }, { opacity: 1, letterSpacing: '0.02em', duration: 0.7, ease: 'power3.out' }, 0.25)
@@ -154,7 +157,29 @@ function playIntro() {
     .fromTo(words.action, { opacity: 0, scale: 1.3 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'power3.out' }, 3.24)
     .to(intro, { autoAlpha: 0, duration: 0.4, ease: 'power2.inOut' }, 3.9);
 
-  const skip = () => { if (!tl.isActive() && tl.progress() === 1) return; tl.kill(); gsap.to(intro, { autoAlpha: 0, duration: 0.3, onComplete: done }); };
+  // "Tap anywhere to roll": if the browser already allows sound (or the visitor muted it), roll straight away.
+  // Otherwise wait for the tap that unlocks sound — or roll silently after 4 seconds.
+  const gate = $('[data-gate]');
+  let rolled = false;
+  const roll = () => {
+    if (rolled) return;
+    rolled = true;
+    clearTimeout(fallback);
+    gate.classList.add('is-gone');
+    tl.play();
+  };
+  let fallback = 0;
+  const forceGate = new URLSearchParams(location.search).has('gate'); // preview the start screen: /?gate
+  if (!forceGate && (sound.live() || !sound.isOn())) roll();
+  else {
+    html.classList.add('gate-on');
+    const onTap = (e) => { if (e.target.closest('[data-skip], [data-sound]')) return; sound.unlock().finally(roll); };
+    window.addEventListener('pointerdown', onTap, { capture: true, once: true });
+    window.addEventListener('keydown', onTap, { capture: true, once: true });
+    fallback = setTimeout(roll, 4000);
+  }
+
+  const skip = () => { if (rolled && !tl.isActive() && tl.progress() === 1) return; rolled = true; clearTimeout(fallback); tl.kill(); gsap.to(intro, { autoAlpha: 0, duration: 0.3, onComplete: done }); };
   $('[data-skip]').addEventListener('click', skip);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && html.classList.contains('intro-on')) skip(); });
 }
